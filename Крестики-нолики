@@ -1,0 +1,61 @@
+board = list(range(1,10))
+
+def draw_board(board):
+    for i in range(3):
+        print(board[0+i*3],board[1+i*3],board[2+i*3])
+
+
+def have_input(player):
+    valid = False
+    while not valid:
+        player_a = input("Введите " + player+"? ")
+        try:
+            player_a = int(player_a)
+        except:
+            print("Некорректный ввод. Вы уверены, что ввели число?")
+            continue
+        if player_a >= 1 and player_a <= 9:
+            if (str(board[player_a-1]) not in "XO"):
+                board[player_a-1] = player
+                valid = True
+            else:
+                print("Некорректый выбор клетки. Выберите от 1 до 9 из свободных клеток.")
+
+
+def win_1(board):
+    win_coordinate = ((0,1,2),
+                      (3,4,5),
+                      (6,7,8),
+                      (0,3,6),
+                      (1,4,7),
+                      (2,5,8),
+                      (0,4,8),
+                      (2,4,6))
+    for turn in win_coordinate:
+        if board[turn[0]] == board[turn[1]] == board[turn[2]]:
+            return board[turn[0]]
+    return False
+
+def main(board):
+    counter = 0
+    win = False
+    while not win:
+        draw_board(board)
+        if counter % 2 == 0:
+            have_input("✖")
+        else:
+            have_input("○")
+        counter += 1
+        if counter > 4:
+            player = win_1(board)
+            if player:
+                print('-' * 3)
+                win = True
+                break
+        if counter == 9:
+            print('-' * 3)
+            print("Ничья!")
+            break
+    draw_board(board)
+
+main(board)
